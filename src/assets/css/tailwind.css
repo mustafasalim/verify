@@ -13,3 +13,23 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* shacking effect*/
+.annim {
+  position: relative;
+  animation: le 0.1s forwards;
+}
+@keyframes le {
+  0% {
+    top: 4px;
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+  80% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    top: 0px;
+  }
+}

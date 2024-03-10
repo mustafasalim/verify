@@ -5,6 +5,7 @@ function Verify() {
   const [code, setCode] = useState<any>([])
   const [success, setSuccess] = useState<any>(false)
   const [auth, setAuth] = useState<any>(null)
+  const [inputValue, setInputValue] = useState<string>("")
 
   const refs = [
     useRef<HTMLInputElement>(null),
@@ -16,7 +17,6 @@ function Verify() {
   const handleChange = (index: number, value: string) => {
     const newCode = [...code]
     newCode[index] = value
-
     if (index < 3 && value !== "") {
       // Bir sonraki input alanına geçiş yap
       refs[index + 1].current?.focus()
@@ -25,32 +25,39 @@ function Verify() {
   }
 
   const handleKeyDown = (index: any, value: any) => {
+    const newItem = [...code]
+    //input alanındaki deger silindiginde diziden o elemanı kaldır
+    newItem.splice(index, 1)
+
     if (value === "Backspace" && value !== "") {
-      // Bir sonraki input alanına geçiş yap
+      // Bir önceki input alanına geç
       setTimeout(() => {
-        refs[index - 1].current?.focus()
+        refs[index - 1]?.current?.focus()
       }, 10)
+
+      // yeni deger
+      setCode(newItem)
     }
   }
-
-  const isValidCode = () => {
-    return code.join("") === "1234"
-  }
-
-  console.log(code.join(""))
-
   useEffect(() => {
+    const isValidCode = () => {
+      return code.join("") === "1234"
+    }
     if (code.length === 4) {
       setSuccess(isValidCode())
       setAuth(isValidCode())
+    } else if (code.length === 1) {
+      setAuth(null)
     }
   }, [code])
+
+  console.log(auth)
 
   return (
     <>
       <div
         className={`flex flex-col items-center justify-center p-6 border  ${
-          auth === false && "!border-red-500"
+          auth === false && "!border-red-500 transition-colors annim"
         } rounded-md gap-y-2`}
       >
         <div className="w-full flex flex-col gap-y-2">
@@ -76,12 +83,16 @@ function Verify() {
                     placeholder="0"
                     onChange={(e) => handleChange(index, e.target.value)}
                     ref={ref}
-                    className={`outline-none border-2 focus:border-blue-500 ${
-                      auth === false && "!border-red-500"
+                    className={`outline-none border focus:border-blue-500 ${
+                      auth === false && "!border-red-500 transition-colors"
                     } w-10 h-10 rounded-md text-center font-semibold`}
                     type="number"
                   />
                 ))}
+              </div>
+
+              <div className="w-full text-red-500">
+                {auth === false ? "entered code incorrect" : ""}
               </div>
             </>
           )}
