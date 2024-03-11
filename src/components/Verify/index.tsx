@@ -5,8 +5,8 @@ function Verify() {
   const [code, setCode] = useState<any>([])
   const [success, setSuccess] = useState<any>(false)
   const [auth, setAuth] = useState<any>(null)
-  const [inputValue, setInputValue] = useState<string>("")
 
+  const verifyCode = "1234"
   const refs = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -41,13 +41,11 @@ function Verify() {
   }
   useEffect(() => {
     const isValidCode = () => {
-      return code.join("") === "1234"
+      return code.join("") === verifyCode
     }
     if (code.length === 4) {
       setSuccess(isValidCode())
       setAuth(isValidCode())
-    } else if (code.length === 1) {
-      setAuth(null)
     }
   }, [code])
 
@@ -83,10 +81,12 @@ function Verify() {
                     placeholder="0"
                     onChange={(e) => handleChange(index, e.target.value)}
                     ref={ref}
-                    className={`outline-none border focus:border-blue-500 ${
-                      auth === false && "!border-red-500 transition-colors"
+                    className={`outline-none border focus:border-blue-500 placeholder:text-black/30 ${
+                      auth === false &&
+                      "!border-red-500 bg-red-100 transition-colors"
                     } w-10 h-10 rounded-md text-center font-semibold`}
-                    type="number"
+                    type="text"
+                    maxLength={1}
                   />
                 ))}
               </div>
